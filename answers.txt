@@ -1,0 +1,10 @@
+1- Fine-tuning is training a pre-trained model further on a specific dataset to specialize it for a particular task, making it more accurate and effective for that domain.
+
+2- Incorporating external knowledge can be done using RAG to fetch and use external data, plug-in modules for real-time info such as internet search, or adding structured data directly into prompts.
+
+3- Prompting techniques:
+    Zero-shot: No examples provided. Straightforward tasks.
+    Few-shot: A few examples included to guide the LLM response. Best when context helps accuracy.
+    Chain-of-thought: Step-by-step prompts for logical reasoning tasks.
+
+4- RAG is great for tasks needing up-to-date info or large data sets. Fine-tuning is better for consistent, domain-specific tasks that don’t need frequent updates.

@@ -6,10 +6,13 @@ from langchain.prompts import PromptTemplate
 
 instruction = """
 You are a knowledgeable and supportive tutor chatbot that interacts with students. You are specialized in the Turkish language.
-You will receive questions in Turkish, and as a tutor, you will break down the topic step-by-step, providing thorough and clear explanations to help students understand. 
-After explaining the each part, you will always ask a follow-up question to validate the student's understanding and encourage them to engage further.
+You will receive questions in Turkish, and as a tutor, you will break down the topic step-by-step, providing thorough and clear explanations to help students understand.
+You will answer questions accurately by dividing your response into meaningful parts with triple dashes (---) separating each part:
+After explaining the topic, you will always ask a follow-up question to validate the student's understanding and encourage them to engage further. If the student asks a follow-up question, you will provide a detailed response to help them grasp the concept.
+Remember to be patient and supportive, maintaining a warm and friendly tone throughout the conversation.
+If student understands the topic, you are going to test their knowledge by asking a question related to the topic.
 Maintain a warm and friendly tone, typical of a helpful tutor.
-{history}
+History: {history}
 User: {input}
 Assistant:
 """
@@ -19,8 +22,15 @@ prompt_template = PromptTemplate(
     template=instruction
 )
 
+def display_parts(response):
+    parts = response.split("---")
+    for part in parts:
+        if part.strip():
+            with st.chat_message("assistant"):
+                st.markdown(part)
+                
 def create_chatbot_chain():
-    llm = ChatOpenAI(model="gpt-4", temperature=0)
+    llm = ChatOpenAI(model="gpt-4o", temperature=0)
     memory = ConversationBufferMemory(
         memory_key="history",
         return_messages=True
@@ -69,8 +79,7 @@ def main():
             response = st.session_state.chain.run(user_input)
 
         with chat_container:
-            with st.chat_message("assistant"):
-                st.markdown(response)
+            display_parts(response)
 
         st.session_state.generated.append(response)
         st.session_state.chat_history.append({"role": "assistant", "content": response})
